@@ -5,6 +5,7 @@ add_action('wp_ajax_nopriv_submit_delivery_form', 'handle_delivery_form');
 function handle_delivery_form() {
     global $wpdb;
 
+    
     // Sanitize all inputs
     $first_name  = sanitize_text_field($_POST['firstName'] ?? '');
     $last_name   = sanitize_text_field($_POST['lastName'] ?? '');

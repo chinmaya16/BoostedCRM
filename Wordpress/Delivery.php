@@ -8,7 +8,7 @@ get_header();
 
 ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <div class="container">
+ <div class="container">
         <div class="header">
             <h1>🚚 Delivery Information</h1>
             <p>Please fill in all required fields to process your delivery</p>
@@ -32,26 +32,17 @@ get_header();
                             <label for="email">Email <span class="required">*</span></label>
                             <input type="email" id="email" name="email" required>
                         </div>
-                        <div class="form-group">
-                            <label for="phone">Phone <span class="required">*</span></label>
-                            <div class="phone-input">
-                                <div class="country-code">
-                                    <select name="countryCode" required>
-                                        <option value="+880">🇧🇩 +880</option>
-                                        <option value="+1">🇺🇸 +1</option>
-                                        <option value="+44">🇬🇧 +44</option>
-                                        <option value="+91" selected>🇮🇳 +91</option>
-                                        <option value="+86">🇨🇳 +86</option>
-                                        <option value="+81">🇯🇵 +81</option>
-                                        <option value="+49">🇩🇪 +49</option>
-                                        <option value="+33">🇫🇷 +33</option>
-                                        <option value="+61">🇦🇺 +61</option>
-                                        <option value="+7">🇷🇺 +7</option>
-                                    </select>
-                                </div>
-                                <input type="tel" class="phone-number" name="phoneNumber" placeholder="Enter phone number" pattern="[0-9]*" inputmode="numeric" required>
-                            </div>
-                        </div>
+
+
+<div class="form-group">
+    <label for="phone">Phone <span class="required">*</span></label>
+      <input id="phone" type="tel" name="phoneNumber_display" required>
+  <input type="hidden" name="phoneNumber" id="fullPhone"> <!-- Final value -->
+</div>
+
+
+
+
                         <div class="form-group">
                             <label for="deliveryDate">Expected Delivery Date <span class="required">*</span></label>
                             <input type="date" id="deliveryDate" name="deliveryDate" required>
@@ -75,16 +66,16 @@ get_header();
                             <label for="billingCountry">Country <span class="required">*</span></label>
                             <select id="billingCountry" name="billingCountry" required>
                                 <option value="">Select your country</option>
-                                <option value="BD">🇧🇩 Bangladesh</option>
-                                <option value="US">🇺🇸 United States</option>
-                                <option value="UK">🇬🇧 United Kingdom</option>
-                                <option value="CA">🇨🇦 Canada</option>
-                                <option value="IN">🇮🇳 India</option>
-                                <option value="CN">🇨🇳 China</option>
-                                <option value="JP">🇯🇵 Japan</option>
-                                <option value="DE">🇩🇪 Germany</option>
-                                <option value="FR">🇫🇷 France</option>
-                                <option value="AU">🇦🇺 Australia</option>
+                                <option value="Bangladesh">Bangladesh</option>
+                                <option value="United States">United States</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="Canada">Canada</option>
+                                <option value="India" selected>India</option>
+                                <option value="China">China</option>
+                                <option value="Japan">Japan</option>
+                                <option value="Germany">Germany</option>
+                                <option value="France">France</option>
+                                <option value="Australia">Australia</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -122,16 +113,16 @@ get_header();
                             <label for="shippingCountry">Country</label>
                             <select id="shippingCountry" name="shippingCountry">
                                 <option value="">Select your country</option>
-                                <option value="BD">🇧🇩 Bangladesh</option>
-                                <option value="US">🇺🇸 United States</option>
-                                <option value="UK">🇬🇧 United Kingdom</option>
-                                <option value="CA">🇨🇦 Canada</option>
-                                <option value="IN">🇮🇳 India</option>
-                                <option value="CN">🇨🇳 China</option>
-                                <option value="JP">🇯🇵 Japan</option>
-                                <option value="DE">🇩🇪 Germany</option>
-                                <option value="FR">🇫🇷 France</option>
-                                <option value="AU">🇦🇺 Australia</option>
+                                <option value="Bangladesh">Bangladesh</option>
+                                <option value="United States">United States</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="Canada">Canada</option>
+                                <option value="India" selected>India</option>
+                                <option value="China">China</option>
+                                <option value="Japan">Japan</option>
+                                <option value="Germany">Germany</option>
+                                <option value="France">France</option>
+                                <option value="Australia">Australia</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -185,7 +176,7 @@ get_header();
                                         <option value="Box">Box</option>
                                     </select>
                                 </td>
-                                <td><input type="number" name="itemQty[]" min="1" value="1" required></td>
+                                <td><input type="number" name="itemQty[]" min="1" value="1"  oninput="this.value = this.value.replace(/[^0-9]/g, '')" required></td>
                                 <td><button type="button" class="remove-btn" onclick="removeRow(this)">Remove</button></td>
                             </tr>
                         </tbody>
@@ -229,33 +220,34 @@ get_header();
         </div>
     </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
 <script>
-jQuery(document).ready(function($) {
-    $('#deliveryForm').on('submit', function(e) {
-        e.preventDefault();
+document.addEventListener("DOMContentLoaded", function() {
+  var input = document.querySelector("#phone");
+  var iti = window.intlTelInput(input, {
+    initialCountry: "in",
+    separateDialCode: true,
+    onlyCountries: ["bd","us","gb","in","cn","jp","de","fr","au","ru"],
+    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
+  });
 
-        let formData = $(this).serialize(); // serialize all fields
+  // On form submit → set hidden input value
+input.addEventListener("input", function() {
+  document.querySelector("#fullPhone").value = iti.getNumber();
+});
 
-        $.ajax({
-            url: '<?php echo admin_url("admin-ajax.php"); ?>',
-            type: 'POST',
-            data: formData + '&action=submit_delivery_form',
-            success: function(response) {
-                alert(response.data.message);
-                $('#deliveryForm')[0].reset(); // clear form
-            },
-            error: function() {
-                alert("Something went wrong. Please try again.");
-            }
-        });
-    });
+// Also update on country change (when flag changes)
+input.addEventListener("countrychange", function() {
+  document.querySelector("#fullPhone").value = iti.getNumber();
+});
 });
 </script>
 
 <script>
 
 $(document).ready(function () {
-    $(".phone-number").on("input", function () {
+    $("#phone").on("input", function () {
         // Remove anything that is not a digit
         this.value = this.value.replace(/[^0-9]/g, '');
     });
@@ -382,7 +374,7 @@ $(document).ready(function () {
                     data[key] = value;
                 }
             }
-            
+            console.log(data);
             // Display success message
             document.getElementById('successMessage').style.display = 'block';
             
@@ -412,7 +404,7 @@ $(document).ready(function () {
                 </div>
                 <div class="data-item">
                     <div class="data-label">Phone:</div>
-                    <div class="data-value">${data.countryCode} ${data.phoneNumber}</div>
+                    <div class="data-value">${data.phoneNumber}</div>
                 </div>
                 <div class="data-item">
                     <div class="data-label">Delivery Date:</div>

@@ -8,6 +8,7 @@ get_header();
 
 ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css"/>
  <div class="container">
         <div class="header">
             <h1>🚚 Delivery Information</h1>
@@ -809,3 +810,4 @@ $(document).ready(function () {
     </style>
 <?php
 get_footer();
+

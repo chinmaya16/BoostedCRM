@@ -221,7 +221,28 @@ get_header();
         </div>
     </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- JS -->
+<script>
+jQuery(document).ready(function($) {
+    $('#deliveryForm').on('submit', function(e) {
+        e.preventDefault();
+
+        let formData = $(this).serialize(); // serialize all fields
+
+        $.ajax({
+            url: '<?php echo admin_url("admin-ajax.php"); ?>',
+            type: 'POST',
+            data: formData + '&action=submit_delivery_form',
+            success: function(response) {
+                alert(response.data.message);
+                $('#deliveryForm')[0].reset(); // clear form
+            },
+            error: function() {
+                alert("Something went wrong. Please try again.");
+            }
+        });
+    });
+});
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -810,4 +831,5 @@ $(document).ready(function () {
     </style>
 <?php
 get_footer();
+
 

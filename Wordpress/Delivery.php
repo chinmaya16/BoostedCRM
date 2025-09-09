@@ -9,7 +9,7 @@ get_header();
 ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css"/>
- <div class="container">
+<div class="container">
         <div class="header">
             <h1>🚚 Delivery Information</h1>
             <p>Please fill in all required fields to process your delivery</p>
@@ -206,7 +206,10 @@ get_header();
                     </div>
                 </div>
 
-                <button type="submit" class="submit-btn">🚀 Submit Order</button>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="submit-btn">🚀 Submit Order</button>
+                    <button type="button" class="reset-btn" onclick="resetForm()">🔄 Reset Form</button>
+                </div>
             </form>
 
             <div class="success-message" id="successMessage">
@@ -221,6 +224,7 @@ get_header();
         </div>
     </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- JS -->
 <script>
 jQuery(document).ready(function($) {
     $('#deliveryForm').on('submit', function(e) {
@@ -398,7 +402,12 @@ $(document).ready(function () {
             }
             console.log(data);
             // Display success message
-            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'block'
+
+        // Auto-reset form after 3 seconds
+        setTimeout(function() {
+            resetForm();
+        }, 3000);;
             
             // Display submitted data
             displaySubmittedData(data);
@@ -512,8 +521,56 @@ $(document).ready(function () {
 
         // Set minimum date to today
         document.getElementById('deliveryDate').min = new Date().toISOString().split('T')[0];
+    
+        // Reset form function
+        function resetForm() {
+            // Get the form element
+            const form = document.querySelector('form');
+
+            if (form) {
+                // Reset the form
+                form.reset();
+
+                // Hide success message if visible
+                const successMessage = document.getElementById('successMessage');
+                if (successMessage) {
+                    successMessage.style.display = 'none';
+                }
+
+                // Hide data display if visible
+                const dataDisplay = document.getElementById('dataDisplay');
+                if (dataDisplay) {
+                    dataDisplay.style.display = 'none';
+                }
+
+                // Reset any dynamic content (like item tables)
+                const itemsTable = document.querySelector('table tbody');
+                if (itemsTable) {
+                    const rows = itemsTable.querySelectorAll('tr');
+                    // Keep only the first row and clear its inputs
+                    for (let i = rows.length - 1; i > 0; i--) {
+                        rows[i].remove();
+                    }
+
+                    // Clear first row inputs
+                    if (rows[0]) {
+                        const inputs = rows[0].querySelectorAll('input, select, textarea');
+                        inputs.forEach(input => {
+                            if (input.type === 'checkbox' || input.type === 'radio') {
+                                input.checked = false;
+                            } else {
+                                input.value = '';
+                            }
+                        });
+                    }
+                }
+
+                // Scroll to top
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+        }
     </script>
-<style>
+ <style>
         * {
             margin: 0;
             padding: 0;
@@ -718,9 +775,30 @@ $(document).ready(function () {
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 100%;
-            margin-top: 20px;
+            flex: 1;
             font-weight: 600;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            font-weight: 600;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3);
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);
         }
 
         .submit-btn:hover {
